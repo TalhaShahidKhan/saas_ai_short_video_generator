@@ -13,7 +13,6 @@ export function ThemeProvider({ children, ...props }) {
   const CreateUser = useMutation(api.users.CreateNewUser);
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log(user)
       if (user){
         const result = await CreateUser({
           name: user?.displayName,
@@ -21,7 +20,6 @@ export function ThemeProvider({ children, ...props }) {
           photoURL: user?.photoURL,
         });
         setUser(result)
-        console.log(result)
       }
     });
     return () => {

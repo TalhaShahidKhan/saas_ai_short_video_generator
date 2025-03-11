@@ -1,7 +1,23 @@
 import { generateScript } from "@/configs/AiModel"
 import { NextResponse } from "next/server"
 
-const BASE_PROMPT = `write a plain two different scripts  on topic : {topic}\n\n- Give me output in JSON format  and follow the schema:\n- {\n   scripts:[\n      {\n    content:""\n}\n]\n}`
+const BASE_PROMPT = `write a two different scripts for a 30 second video on topic : {topic}
+
+Don't add any Scene description.
+Don't add any Character or 'Narrator'.
+It must be at least in 50 words.
+Don't add anything in braces. Just return the plain story in text.
+Give me output in JSON format  and follow the schema:
+
+{
+scripts:[
+{
+content:""
+}
+]
+}
+
+`
 
 
 

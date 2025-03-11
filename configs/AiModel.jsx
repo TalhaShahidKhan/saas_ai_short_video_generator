@@ -25,17 +25,13 @@ export const generateScript = model.startChat({
     {
       role: "user",
       parts: [
-        {
-          text: 'write a two different scripts for a 30 second video on topic : Kids Story\n\n- Give me output in JSON format  and follow the schema:\n- {\n   scripts:[\n      {\n    content:""\n}\n]\n}',
-        },
+        {text: "write a two different scripts for a 30 second video on topic : Kids Story\n\nDon't add any Scene description.\nDon't add any Character or 'Narrator'.\nIt must be at least in 50 words.\nDon't add anything in braces. Just return the plain story in text.\nGive me output in JSON format  and follow the schema:\n\n{\nscripts:[\n{\ncontent:\"\"\n}\n]\n}"},
       ],
     },
     {
       role: "model",
       parts: [
-        {
-          text: '```json\n{\n  "scripts": [\n    {\n      "content": "**Video 1: Animated Story Teaser**\\n\\n**(Scene: Open on a vibrant, colorful illustration of a whimsical forest.)**\\n\\n**(0-5 seconds) NARRATOR (Warm, inviting voice):** Deep in the Whispering Woods, lived a little firefly with a very big problem.\\n\\n**(5-10 seconds) (Show a close-up of a cute, but slightly worried, firefly character.)**\\n\\n**(10-15 seconds) NARRATOR:** Sparkle couldn\'t... well, sparkle!\\n\\n**(15-20 seconds) (Quick cuts: Sparkle trying to light up, failing; other fireflies glowing brightly; Sparkle looking sad.)**\\n\\n**(20-25 seconds) NARRATOR:** But one day, he stumbled upon a secret. A secret that could change everything.\\n\\n**(25-30 seconds) (End on a captivating image: Sparkle looking determined, walking towards a mysterious glowing object in the distance. Text overlay: \\"Sparkle\'s Secret. Coming Soon!\\")**"\n    },\n    {\n      "content": "**Video 2: Real Kid Reading a Book**\\n\\n**(Scene: A cozy room. A child (age 6-8) is sitting comfortably, holding a brightly illustrated children\'s book.)**\\n\\n**(0-5 seconds) (Child smiles at the camera.)**\\n\\n**(5-10 seconds) CHILD:** Hi! Want to hear a story?\\n\\n**(10-15 seconds) (Child opens the book and begins reading with enthusiasm.)**\\n\\n**(15-20 seconds) CHILD:** \\"...and the brave little knight faced the dragon! But the dragon wasn\'t scary at all. He just wanted a friend!\\" \\n\\n**(20-25 seconds) (Child looks up at the camera, showing a picture in the book of the knight and dragon.)**\\n\\n**(25-30 seconds) CHILD:** This story is so good! Find more amazing stories [Bookstore Name/Website]! (Child winks) \\n\\n**(Optional: Text overlay: [Bookstore Name/Website] during last 5 seconds.)**"\n    }\n  ]\n}\n```',
-        },
+        {text: "```json\n{\n  \"scripts\": [\n    {\n      \"content\": \"Once upon a time, in a land filled with sparkling rivers and candy floss clouds, lived a tiny firefly named Flicker. Flicker was different; his light was dim. He felt sad, watching the other fireflies blaze brightly. One night, lost and alone, he stumbled upon a field of glow-worms, each emitting a soft, gentle glow. They taught Flicker that even a little light can make a big difference, especially when shared. Flicker joined them, and together, their combined gentle light guided lost travelers safely home. And Flicker, finally, understood his worth.\"\n    },\n    {\n      \"content\": \"Deep in the Whispering Woods lived a little acorn, smaller than all the others. He worried he'd never become a mighty oak. He watched the older acorns fall, sprout, and grow tall. One day, a strong wind came. All the big acorns were blown far away, but the little acorn, sheltered by a rock, stayed put. Spring came, and a tiny root emerged. Because he stayed safe, he got to grow. Years later, he stood tall, a haven for birds and squirrels, proving that even the smallest seed can become the strongest tree.\"\n    }\n  ]\n}\n```"},
       ],
     },
   ],

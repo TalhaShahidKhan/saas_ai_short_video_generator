@@ -18,13 +18,19 @@ const SUGGESTIONS = [
   "Tech Tips for Everyday Life"
 ]
 
-const TopicForm = ({onHandleInputChange}) => {
-  const [title, setTitle] = useState("")
-  const [topic, setTopic] = useState("")
+const TopicForm = ({onHandleInputChange, formData}) => {
+  const [title, setTitle] = useState(formData?.title || "")
+  const [topic, setTopic] = useState(formData?.topic || "")
   const [scripts, setScripts] = useState([])
-  const [selectedScript, setSelectedScript] = useState(null)
+  const [selectedScript, setSelectedScript] = useState(formData?.selectedScript || null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    setTitle(formData?.title || "")
+    setTopic(formData?.topic || "")
+    setSelectedScript(formData?.selectedScript)
+  }, [formData])
 
   const generateScripts = async (topicText) => {
     try {

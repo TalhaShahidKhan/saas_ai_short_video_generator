@@ -19,6 +19,6 @@ export default defineSchema({
         createdBy:v.string(),
         images:v.optional(v.any()),
         audioUrl:v.optional(v.string()),
-        captionJson:v.optional(v.string()),
+        captionJson:v.optional(v.any()),
     })
 })

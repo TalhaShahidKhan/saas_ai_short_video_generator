@@ -26,6 +26,7 @@ function CreateNewVideo() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [resetKey, setResetKey] = useState(0);
   const CreateInitialVideoData = useMutation(api.videoData.CreateNewVideoData);
   const { user } = useAuthContext();
 
@@ -59,7 +60,6 @@ function CreateNewVideo() {
   };
 
   const handleGenerateVideo = async () => {
-    // Clear previous states
     setError(null);
     setSuccess(null);
 
@@ -67,7 +67,18 @@ function CreateNewVideo() {
 
     try {
       setIsGenerating(true);
+      const resp = await CreateInitialVideoData({
+        title: formData.title,
+        topic: formData.topic,
+        script: formData.selectedScript.content,
+        videoStyle: formData.videoStyle.name,
+        voice: formData.voice.value,
+        caption: formData.captionStyle,
+        uid: user._id,
+        createdBy: user.email,
+      });
 
+      console.log(resp)
       const response = await fetch("/api/generate_video_data", {
         method: "POST",
         headers: {
@@ -80,6 +91,7 @@ function CreateNewVideo() {
           videoStyle: formData.videoStyle,
           voice: formData.voice,
           captionStyle: formData.captionStyle,
+          recordId:resp
         }),
       });
 
@@ -87,37 +99,35 @@ function CreateNewVideo() {
         throw new Error("Failed to generate video");
       }
 
-      const resp = await CreateInitialVideoData({
-        title: formData.title,
-        topic: formData.topic,
-        script: formData.selectedScript.content,
-        videoStyle: formData.videoStyle.name,
-        voice: formData.voice.value,
-        caption: formData.captionStyle,
-        uid: user._id,
-        createdBy: user.email,
-      });
+      
 
-    //   const data = await response.json();
       setSuccess(
         "Your video generation has started. You'll be notified when it's ready."
       );
 
-      // Optional: Clear form or redirect
-      setFormData({
-        title: "",
-        topic: "",
-        selectedScript: null,
-        videoStyle: null,
-        voice: null,
-        captionStyle: null,
-      });
+      // Reset all form data and notify child components
+      handleResetForm();
+      
     } catch (error) {
       console.error("Error generating video:", error);
       setError("Failed to generate video. Please try again later.");
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const handleResetForm = () => {
+    // Reset main form data
+    setFormData({
+      title: "",
+      topic: "",
+      selectedScript: null,
+      videoStyle: null,
+      voice: null,
+      captionStyle: null,
+    });
+    // Increment resetKey to trigger component resets
+    setResetKey(prev => prev + 1);
   };
 
   const containerVariants = {
@@ -176,10 +186,26 @@ function CreateNewVideo() {
             </Alert>
           )}
 
-          <TopicForm onHandleInputChange={handleInputChange} />
-          <VideoImage onHandleInputChange={handleInputChange} />
-          <Voice onHandleInputChange={handleInputChange} />
-          <Captions onHandleInputChange={handleInputChange} />
+          <TopicForm 
+            key={`topic-${resetKey}`}
+            onHandleInputChange={handleInputChange} 
+            formData={formData}
+          />
+          <VideoImage 
+            key={`video-${resetKey}`}
+            onHandleInputChange={handleInputChange} 
+            formData={formData}
+          />
+          <Voice 
+            key={`voice-${resetKey}`}
+            onHandleInputChange={handleInputChange} 
+            formData={formData}
+          />
+          <Captions 
+            key={`captions-${resetKey}`}
+            onHandleInputChange={handleInputChange} 
+            formData={formData}
+          />
 
           {/* Generate Video Button */}
           <motion.div
@@ -207,7 +233,10 @@ function CreateNewVideo() {
           </motion.div>
         </motion.div>
         <motion.div variants={itemVariants}>
-          <Preview formData={formData} />
+          <Preview 
+            key={`preview-${resetKey}`}
+            formData={formData} 
+          />
         </motion.div>
       </div>
     </motion.div>

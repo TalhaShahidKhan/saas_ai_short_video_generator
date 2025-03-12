@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle2, Type } from "lucide-react";
@@ -145,8 +145,12 @@ export const captionStyles = [
   }
 ];
 
-const Captions = ({onHandleInputChange}) => {
-  const [selectedStyle, setSelectedStyle] = useState(null);
+const Captions = ({onHandleInputChange, formData}) => {
+  const [selectedStyle, setSelectedStyle] = useState(formData?.captionStyle?.value || null);
+
+  useEffect(() => {
+    setSelectedStyle(formData?.captionStyle?.value || null);
+  }, [formData]);
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },

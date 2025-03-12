@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, Volume2 } from "lucide-react"
@@ -48,9 +48,13 @@ export const voiceOptions = [
   },
 ]
 
-const Voice = ({onHandleInputChange}) => {
-  const [selectedVoice, setSelectedVoice] = useState(null)
+const Voice = ({onHandleInputChange, formData}) => {
+  const [selectedVoice, setSelectedVoice] = useState(formData?.voice?.value || null);
   
+  useEffect(() => {
+    setSelectedVoice(formData?.voice?.value || null);
+  }, [formData]);
+
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
@@ -36,8 +36,12 @@ export const VIDEO_STYLES = [
   
 ]
 
-const VideoImage = ({ onHandleInputChange }) => {
-  const [selectedStyle, setSelectedStyle] = useState(null)
+const VideoImage = ({ onHandleInputChange, formData }) => {
+  const [selectedStyle, setSelectedStyle] = useState(formData?.videoStyle?.name || null);
+
+  useEffect(() => {
+    setSelectedStyle(formData?.videoStyle?.name || null);
+  }, [formData]);
 
   const handleStyleSelect = (style) => {
     const newStyle = selectedStyle === style.name ? null : style;

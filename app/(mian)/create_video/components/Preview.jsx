@@ -5,6 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Image from "next/image"
 
 function Preview({ formData }) {
+  // Add prop types validation
+  if (!formData) {
+    return null;
+  }
+
   return (
     <motion.div className="lg:sticky lg:top-8 max-h-[90vh] flex flex-col">
       <Card className="w-full h-full flex flex-col">

@@ -76,9 +76,9 @@ function CreateNewVideo() {
         caption: formData.captionStyle,
         uid: user._id,
         createdBy: user.email,
+        credits: user.credits,
       });
 
-      console.log(resp)
       const response = await fetch("/api/generate_video_data", {
         method: "POST",
         headers: {
@@ -91,7 +91,7 @@ function CreateNewVideo() {
           videoStyle: formData.videoStyle,
           voice: formData.voice,
           captionStyle: formData.captionStyle,
-          recordId:resp
+          recordId: resp,
         }),
       });
 
@@ -99,15 +99,12 @@ function CreateNewVideo() {
         throw new Error("Failed to generate video");
       }
 
-      
-
       setSuccess(
         "Your video generation has started. You'll be notified when it's ready."
       );
 
       // Reset all form data and notify child components
       handleResetForm();
-      
     } catch (error) {
       console.error("Error generating video:", error);
       setError("Failed to generate video. Please try again later.");
@@ -127,7 +124,7 @@ function CreateNewVideo() {
       captionStyle: null,
     });
     // Increment resetKey to trigger component resets
-    setResetKey(prev => prev + 1);
+    setResetKey((prev) => prev + 1);
   };
 
   const containerVariants = {
@@ -186,24 +183,25 @@ function CreateNewVideo() {
             </Alert>
           )}
 
-          <TopicForm 
+          <TopicForm
             key={`topic-${resetKey}`}
-            onHandleInputChange={handleInputChange} 
+            onHandleInputChange={handleInputChange}
             formData={formData}
+            credits={user?.credits || 0}
           />
-          <VideoImage 
+          <VideoImage
             key={`video-${resetKey}`}
-            onHandleInputChange={handleInputChange} 
+            onHandleInputChange={handleInputChange}
             formData={formData}
           />
-          <Voice 
+          <Voice
             key={`voice-${resetKey}`}
-            onHandleInputChange={handleInputChange} 
+            onHandleInputChange={handleInputChange}
             formData={formData}
           />
-          <Captions 
+          <Captions
             key={`captions-${resetKey}`}
-            onHandleInputChange={handleInputChange} 
+            onHandleInputChange={handleInputChange}
             formData={formData}
           />
 
@@ -233,10 +231,7 @@ function CreateNewVideo() {
           </motion.div>
         </motion.div>
         <motion.div variants={itemVariants}>
-          <Preview 
-            key={`preview-${resetKey}`}
-            formData={formData} 
-          />
+          <Preview key={`preview-${resetKey}`} formData={formData} />
         </motion.div>
       </div>
     </motion.div>

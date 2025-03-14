@@ -1,9 +1,10 @@
 import React from 'react';
+import VideoList from './components/VideoList';
 
 function DashboardPage() {
   return (
-    <div>
-      This is dashboard
+    <div className="">
+      <VideoList />
     </div>
   );
 }

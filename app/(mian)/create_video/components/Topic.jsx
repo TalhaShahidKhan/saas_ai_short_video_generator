@@ -18,7 +18,10 @@ const SUGGESTIONS = [
   "Tech Tips for Everyday Life"
 ]
 
-const TopicForm = ({onHandleInputChange, formData}) => {
+// Add toast to imports
+import { toast } from "sonner";
+
+const TopicForm = ({onHandleInputChange, formData, credits}) => {
   const [title, setTitle] = useState(formData?.title || "")
   const [topic, setTopic] = useState(formData?.topic || "")
   const [scripts, setScripts] = useState([])
@@ -33,11 +36,16 @@ const TopicForm = ({onHandleInputChange, formData}) => {
   }, [formData])
 
   const generateScripts = async (topicText) => {
+    if (credits <= 0) {
+      toast.error("Please Buy more credits");
+      return;
+    }
+
     try {
-      setIsGenerating(true)
-      setError("")
-      setScripts([])
-      setSelectedScript(null)
+      setIsGenerating(true);
+      setError("");
+      setScripts([]);
+      setSelectedScript(null);
 
       const response = await fetch('/api/generate_script', {
         method: 'POST',
@@ -45,7 +53,7 @@ const TopicForm = ({onHandleInputChange, formData}) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ topic: topicText }),
-      })
+      });
 
       if (!response.ok) {
         throw new Error('Failed to generate scripts')

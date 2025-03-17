@@ -4,6 +4,8 @@ import { createClient } from "@deepgram/sdk";
 import { generateImageScript } from "@/configs/AiModel";
 import { ConvexHttpClient } from "convex/browser";
 import { api } from "@/convex/_generated/api";
+import {getServices, renderMediaOnCloudrun} from '@remotion/cloudrun/client';
+
 const BASE_URL = "https://aigurulab.tech";
 
 const ImageGeneratingPrompt = `Generate Image prompt of {style} style with all details for each scene for 30 seconds video : script: {script} 
@@ -117,6 +119,53 @@ export const GenerateVideoData = inngest.createFunction(
       return result;
     });
 
-    return "Executed successfully";
+
+    const RenderVideo = await step.run(
+      'renderVideo',
+      async()=>{
+        const services = await getServices({
+          region: 'us-east1',
+          compatibleOnly: true,
+        });
+         
+        const serviceName = services[0].serviceName;
+        const result = await renderMediaOnCloudrun({
+          serviceName,
+          region: 'us-east1',
+          serveUrl: process.env.GCP_SERVE_URL,
+          composition: 'youtubeShortvideo',
+          inputProps: {
+            videoData:{
+              audioUrl: generateAudioFile,
+              captionJson: generateCaptions,
+              images: generateImage
+            }
+          },
+          codec: 'h264',
+        });
+         
+        if (result.type === 'success') {
+          console.log(result.bucketName);
+          console.log(result.renderId);
+        }
+        return result?.publicUrl;
+      }
+    )
+
+    const UpdateDownloadUrl = await step.run(
+      'updateDownloadURL',
+      async()=>{
+        const result = await convex.mutation(api.videoData.UpdateVideoData, {
+          recordId: recordId,
+          audioUrl: generateAudioFile,
+          captionJson: generateCaptions,
+          images: generateImage,
+          downloadUrl: RenderVideo
+        });
+        return result;
+      }
+    )
+
+    return UpdateDownloadUrl;
   }
 );

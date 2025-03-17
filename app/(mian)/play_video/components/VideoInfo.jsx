@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Loader2, Calendar, User, Tag, Video, Volume2, Clock, Code } from 'lucide-react';
+import { Loader2, Calendar, User, Tag, Video, Volume2, Clock, Code, Download } from 'lucide-react';
 import moment from 'moment';
 
 function VideoInfo({ videoData, isLoading }) {
@@ -93,6 +93,25 @@ function VideoInfo({ videoData, isLoading }) {
           variants={containerVariants}
           className="space-y-6"
         >
+          {/* Download button */}
+          {videoData.downloadUrl && (
+            <motion.div
+              variants={itemVariants}
+              className="mb-4"
+            >
+              <a 
+                href={videoData.downloadUrl}
+                download={`${videoData.title || 'video'}.mp4`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
+              >
+                <Download className="h-5 w-5 mr-2" />
+                Download Video
+              </a>
+            </motion.div>
+          )}
+          
           {/* Info grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {infoItems.map((item, index) => (

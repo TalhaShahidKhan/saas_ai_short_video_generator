@@ -20,6 +20,7 @@ export default defineSchema({
         images:v.optional(v.any()),
         audioUrl:v.optional(v.string()),
         captionJson:v.optional(v.any()),
-        status:v.optional(v.string())
+        status:v.optional(v.string()),
+        downloadUrl:v.optional(v.string()),
     })
 })

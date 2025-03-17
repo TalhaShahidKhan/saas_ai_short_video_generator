@@ -1,13 +1,13 @@
 import React from 'react';
 import {Composition} from 'remotion';
-import {MyComposition} from './Composition';
+import RemotionComposition from '../components/remotion/RemotionComposition';
  
 export const RemotionRoot = () => {
   return (
     <>
       <Composition
-        id="Empty"
-        component={MyComposition}
+        id="youtubeShortvideo"
+        component={RemotionComposition}
         durationInFrames={60}
         fps={30}
         width={1280}
